@@ -1,0 +1,77 @@
+Console.WriteLine("Добро пожаловать в программу редактирования массива!");
+
+int[] in_array = new int[] { };
+bool exit = true;
+
+static int[] DeleteElement(int[] array, int index)
+{
+    if (index < 0 || index >= array.Length)
+    {
+        Console.WriteLine("Индекс выходит за пределы массива");
+        return array;
+    }
+
+    int[] newArray = new int[array.Length - 1];
+    Array.Copy(array, 0, newArray, 0, index);
+    Array.Copy(array, index + 1, newArray, index, array.Length - index - 1);
+    return newArray;
+}
+
+static int[] AddElement(int[] array, int element)
+{
+    int[] newArray = new int[array.Length + 1];
+    Array.Copy(array, newArray, array.Length);
+    newArray[array.Length] = element;
+    return newArray;
+}
+
+bool isNumber(string str)
+{
+    char[] chars = str.ToCharArray();
+    for (int i = 0; i < chars.Length; i++)
+    {
+        if (!Char.IsDigit(chars[i]))
+            return false;
+    }
+    return true;
+}
+
+string arrayToString(int[] arr)
+{
+    string res = "[";
+    for (int i = 0; i < arr.Length; i++)
+    {
+        res += @$" {arr[i]}";
+    }
+    res += "]";
+    return res;
+}
+
+do
+{
+    Console.Write($" [число] - Удалить число из массива под индексом число" +
+    $"\n [число] - Ввести любое число чтобы добавить в массив" +
+    $"\n выход - Введите выход для выхода" +
+    $"\nВведите операцию:");
+
+    string input = Console.ReadLine().Replace(" ", "").ToLower();
+
+    if (input == "ввыход")
+        exit = false;
+    else if (input.Contains("удалить"))
+    {
+        input = input.Replace("удалить", "");
+        int index = int.Parse(input);
+        in_array = DeleteElement(in_array, index);
+    }
+    else if (isNumber(input))
+    {
+        in_array = AddElement(in_array, int.Parse(input));
+    }
+    else
+    {
+        Console.WriteLine("Данной команды не существует");
+    }
+
+    Console.WriteLine(arrayToString(in_array));
+} while (exit);
